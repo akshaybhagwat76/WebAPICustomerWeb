@@ -11,7 +11,7 @@ using System.Web.Http;
 
 namespace CustomerApp.Controllers
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [RoutePrefix("api/Client")]
     public class ClientServiceController : ApiController
     {
@@ -49,8 +49,9 @@ namespace CustomerApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("AddOrUpdateClient")]
-        public async Task<IHttpActionResult> AddOrUpdateClient(ClientVM model)
+        [AllowAnonymous]
+        [Route("AddClient")]
+        public async Task<IHttpActionResult> AddClient(ClientVM model)
         {
             try
             {
@@ -72,6 +73,31 @@ namespace CustomerApp.Controllers
             }
         }
         #endregion
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("UpdatClient")]
+        public async Task<IHttpActionResult> UpdateClient(ClientVM model)
+        {
+            try
+            {
+                var data =await clientService.AddOrUpdateClient(model);
+                var i = 0;
+                try
+                {
+                    i = int.Parse(data.ToString());
+                    return Success(Messages.SUCCESS, i);
+                }
+                catch (FormatException ex)
+                {
+                    return Error(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
 
         #region Check If Client Exists 
         /// <summary>
