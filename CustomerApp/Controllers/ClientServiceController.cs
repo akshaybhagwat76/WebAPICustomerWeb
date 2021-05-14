@@ -75,7 +75,7 @@ namespace CustomerApp.Controllers
         #endregion
         
         [HttpPost]
-        [AllowAnonymous]
+        
         [Route("UpdatClient")]
         public async Task<IHttpActionResult> UpdateClient(ClientVM model)
         {
